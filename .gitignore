@@ -1,0 +1,5 @@
+
+# exclude pycache folders
+**__pycache__**
+# database data
+pgdb
