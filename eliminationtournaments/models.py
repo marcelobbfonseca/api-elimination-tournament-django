@@ -1,8 +1,8 @@
 from django.db import models
 
-from .inner_layer.entities import (TournamentEntity, RoundEntity, PlayerEntity, 
+from eliminationtournaments.inner_layer.entities import (TournamentEntity, RoundEntity, PlayerEntity, 
     PositionEntity, MatchEntity)
-# Create your models here.
+
 
 class Tournament(models.Model):
     name: str = models.CharField(default='unamed tournament', max_length=80)
@@ -113,9 +113,9 @@ class Position(models.Model):
 
 class Match(models.Model):
     position_one = models.ForeignKey(
-        Position, null=True, blank=True, on_delete=models.SET_NULL)
+        Position, null=True, blank=True,related_name='positions_one' , on_delete=models.SET_NULL)
     position_two = models.ForeignKey(
-        Position, null=True, blank=True, on_delete=models.SET_NULL)
+        Position, null=True, blank=True,related_name='positions_two', on_delete=models.SET_NULL)
     disabled = models.BooleanField
     round = models.ForeignKey(Round, on_delete=models.CASCADE)
 
