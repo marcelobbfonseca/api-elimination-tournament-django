@@ -1,18 +1,17 @@
 from django.db import models
 
 from eliminationtournaments.inner_layer.entities import (TournamentEntity, RoundEntity, PlayerEntity, 
-    PositionEntity, MatchEntity)
+    PositionEntity, MatchEntity, DEFAULT_MATCH_TIME)
 
 
 class Tournament(models.Model):
-    name: str = models.CharField(default='unamed tournament', max_length=80)
+    name = models.CharField(default='unamed tournament', max_length=80)
     size = models.IntegerField(default=8)
     tournament_type = models.CharField(max_length=80)
-    # started, ended, created, draft
-    status = models.CharField(default='draft',  max_length=20)
+    status = models.CharField(default='draft',  max_length=20)# started, ended, created, draft
     current_round = models.IntegerField(default=0)
-    total_rounds = models.IntegerField
-    match_time = models.IntegerField
+    total_rounds = models.IntegerField(default=0)
+    match_time = models.IntegerField(default=DEFAULT_MATCH_TIME)
     # positions = models.ManyToOneRel
     # players = models.ManyToOneRel
     # rounds = models.ManyToOneRel
@@ -51,7 +50,7 @@ class Tournament(models.Model):
 
 
 class Round(models.Model):
-    round_number = models.IntegerField
+    round_number = models.IntegerField(default=0)
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
     # matches = models.ManyToOneRel
 
@@ -83,10 +82,10 @@ class Player(models.Model):
         return RoundEntity(self.id, self.avatar, self.name)
 
 class Position(models.Model):
-    order = models.IntegerField
+    order = models.IntegerField(default=0)
     votes = models.IntegerField(default=0)
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
-    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    player = models.ForeignKey(Player, null=True, blank=True, on_delete=models.SET_NULL)
     next_position = models.ForeignKey(
         'self', null=True, blank=True, on_delete=models.SET_NULL)
 
@@ -116,7 +115,7 @@ class Match(models.Model):
         Position, null=True, blank=True,related_name='positions_one' , on_delete=models.SET_NULL)
     position_two = models.ForeignKey(
         Position, null=True, blank=True,related_name='positions_two', on_delete=models.SET_NULL)
-    disabled = models.BooleanField
+    disabled = models.BooleanField(default=False)
     round = models.ForeignKey(Round, on_delete=models.CASCADE)
 
     @staticmethod
