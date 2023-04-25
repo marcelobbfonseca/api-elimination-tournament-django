@@ -9,6 +9,9 @@ class TournamentRepository:
         model.save()
         return model.to_entity()
 
+    def find(self, id: int) -> TournamentEntity:
+        model = Tournament.objects.get(id)
+        return model.to_entity()
 
 class RoundRepository:
 
