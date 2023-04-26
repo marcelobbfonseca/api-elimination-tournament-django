@@ -13,6 +13,10 @@ class TournamentRepository:
         model = Tournament.objects.get(id)
         return model.to_entity()
 
+    def all(self) -> list[TournamentEntity]:
+        models = Tournament.objects.all()
+        return [ model.to_entity for model in models  ]
+
 class RoundRepository:
 
     def save(self, entity: RoundEntity) -> Round:
