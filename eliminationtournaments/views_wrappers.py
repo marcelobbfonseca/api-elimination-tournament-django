@@ -17,15 +17,19 @@ class TournamentViewWrapper(APIView):
         super().__init__(**kwargs)
 
     def post(self, request: Request, *args, **kwargs):
-        response = self.view.post(request.POST)
+        response = self.view.create(request.POST)
         return Response(response, status=status.HTTP_201_CREATED)
 
     def get(self, request: Request, id=None):
-        response = self.view.get(id)
+        if id is not None:
+            response = self.view.retrieve(id) 
+        else: 
+            response = self.view.list()
+
         return Response(response, status=status.HTTP_200_OK)
 
     def put(self, request: Request, *args, **kwargs):
-        response = self.view.put(request.POST, id)
+        response = self.view.update(request.POST, id)
         return Response(response, status=status.HTTP_200_OK)
 
     def delete(self, request: Request, id=None):
@@ -33,6 +37,7 @@ class TournamentViewWrapper(APIView):
         return Response(response, status=status.HTTP_200_OK)
 
 
-class OldTournamentViewSet(ModelViewSet):
+
+class TournamentViewSet(ModelViewSet):
     queryset = Tournament.objects.all()
     serializer_class = TournamentSerializer

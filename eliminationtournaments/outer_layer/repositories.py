@@ -10,7 +10,7 @@ class TournamentRepository:
         return model.to_entity()
 
     def find(self, id: int) -> TournamentEntity:
-        model = Tournament.objects.get(id)
+        model = Tournament.objects.get(id=id)
         return model.to_entity()
 
     def all(self) -> list[TournamentEntity]:

@@ -9,7 +9,12 @@ class TournamentView:
     def __init__(self) -> None:
        self.repository = TournamentRepository()
 
-    def post(self, request: Dict[str, Any]):
+    def list(self):
+        all_tournaments_use_case = ListTournamentsUseCase(self.repository)
+        tournaments = all_tournaments_use_case.execute()
+        return {'message': 'Ok.', 'body': tournaments }
+
+    def create(self, request: Dict[str, Any]):
 
         create_tournament_use_case = CreateTournamentUseCase()
         name = request.get('name')
@@ -23,31 +28,27 @@ class TournamentView:
           status=request.get('status'),
           match_time=request.get('match_time')
         )
-        repository = TournamentRepository()
-        tournament = create_tournament_use_case.execute(tournament_params, repository)
+        tournament = create_tournament_use_case.execute(tournament_params, self.repository)
         if tournament.id:
             return { 'message': 'Created.', 'body': tournament } # body: serialize(tournament)
         return {'status': 400, 'message': 'Bad request.'}
-        
-    def get(self, id = None):
-      if id:
-        find_tournament_use_case = FindTournamentUseCase()
+  
+    def retrieve(self, id = None):
+        find_tournament_use_case = FindTournamentUseCase(self.repository)
         tournament = find_tournament_use_case.execute(id)
         return {'message': 'Ok.', 'body': tournament } # body: serialize(tournament)
-      else:
-        all_tournaments_use_case = ListTournamentsUseCase(self.repository)
-        tournaments = all_tournaments_use_case.execute()
-        return {'message': 'Ok.', 'body': tournaments }
 
     def delete(self, id = None):
       if id:
-        find_tournament_use_case = DeleteTournamentUseCase()
+        find_tournament_use_case = DeleteTournamentUseCase(self.repository)
         tournament = find_tournament_use_case.execute(id)
         return {'status': 200, 'message': 'Ok.', 'body': tournament } 
+      else:
+        return {'message': 'Bad request'} 
     
-    def put(self,request: Dict[str, Any], id = None):
+    def update(self,request: Dict[str, Any], id = None):
       if id:
-        find_tournament_use_case = FindTournamentUseCase()
+        find_tournament_use_case = FindTournamentUseCase(self.repository)
         tournament = find_tournament_use_case.execute(id)
         name = request.get('name')
         size = request.get('size')

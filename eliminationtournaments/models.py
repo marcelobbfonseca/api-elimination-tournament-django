@@ -7,7 +7,7 @@ from eliminationtournaments.inner_layer.entities import (TournamentEntity, Round
 class Tournament(models.Model):
     name = models.CharField(default='unamed tournament', max_length=80)
     size = models.IntegerField(default=8)
-    tournament_type = models.CharField(max_length=80)
+    tournament_type = models.CharField(max_length=80, default='elimination')
     status = models.CharField(default='draft',  max_length=20)# started, ended, created, draft
     current_round = models.IntegerField(default=0)
     total_rounds = models.IntegerField(default=0)
@@ -28,24 +28,25 @@ class Tournament(models.Model):
             total_rounds=entity.total_rounds,
             match_time=entity.match_time,
             # Player.objects.filter(id__in=player_ids)
-            positions_ids=entity.positions,
-            players_ids=entity.players,  # Player.objects.filter(id__in=player_ids)
-            rounds_ids=entity.rounds  # Player.objects.filter(id__in=player_ids)
+            # positions_ids=entity.positions,
+            # players_ids=entity.players,  # Player.objects.filter(id__in=player_ids)
+            # rounds_ids=entity.rounds  # Player.objects.filter(id__in=player_ids)
         )
 
+    # testar isso
     def to_entity(self) -> TournamentEntity:
         return TournamentEntity(
-            int(self.id),
             self.name,
             self.size,
             self.tournament_type,
-            self.status,
-            self.current_round,
-            self.total_rounds,
-            self.match_time,
-            self.positions.values_list('id', flat=True),
-            self.players.values_list('id', flat=True),
-            self.rounds.values_list('id', flat=True),
+            id=int(self.id),
+            status=self.status,
+            current_round=self.current_round,
+            total_rounds=self.total_rounds,
+            match_time=self.match_time,
+            # self.positions.values_list('id', flat=True),
+            # self.players.values_list('id', flat=True),
+            # self.rounds.values_list('id', flat=True),
         )
 
 
