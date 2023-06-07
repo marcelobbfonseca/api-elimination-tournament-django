@@ -1,11 +1,11 @@
-
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white) ![Django](https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white) ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white) 
 # ELIMINATION TOURNAMENT API
 
 an Elimination tournament API with python django following Clean architecture Principles 
 
-## Instalação e configuração
+## Install and configuration
 
-### Usando Docker
+### with Docker
 
 Requires Docker and docker-compose installed. 
 1. Download and Install docker
