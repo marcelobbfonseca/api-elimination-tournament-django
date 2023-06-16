@@ -5,7 +5,7 @@ services:
     image: postgres:14-bullseye
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_DB: bpmn
+      POSTGRES_DB: tournament_db
       POSTGRES_PASSWORD: 123456
       PGPASSWORD: 123456
     ports:
