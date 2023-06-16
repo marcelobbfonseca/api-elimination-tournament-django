@@ -19,7 +19,7 @@ jobs:
     container: python:3.11.3-bullseye # node:10.18-jessie
     services:
       db:
-        container_name: tournament-db
+        # container_name: tournament-db
         image: postgres:14-bullseye
         env:
           POSTGRES_HOST: postgres
@@ -34,12 +34,12 @@ jobs:
           --health-retries 5
 
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
+      # - uses: actions/checkout@v3
+      # - name: Set up Python 3.11
 
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
+      #   uses: actions/setup-python@v4
+      #   with:
+      #     python-version: 3.11
 
       - name: Install dependencies
         run: |
