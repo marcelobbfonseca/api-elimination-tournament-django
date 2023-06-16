@@ -16,7 +16,7 @@ on:
 jobs:
   container-job:
     runs-on: ubuntu-latest
-    container: node:10.18-jessie
+    container: python:3.11.3-bullseye # node:10.18-jessie
     services:
       db:
         container_name: tournament-db
@@ -32,13 +32,7 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-        # ports:
-        #   - "5432:5432"
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.11"]
+
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
@@ -54,6 +48,12 @@ jobs:
 
       - name: Run migrations
         run: python manage.py makemigrations && python manage.py migrate"
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: tournament_db
+          POSTGRES_PASSWORD: 123456
+          PGPASSWORD: 123456
+          POSTGRES_PORT: 5432
 
       - name: Run tests
         run: python manage.py test eliminationtournaments
