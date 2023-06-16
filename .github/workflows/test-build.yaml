@@ -1,0 +1,36 @@
+name: Django Application Test and Build
+run-name: test and build
+
+on:
+  push:
+    branches:
+      - main
+
+# env:
+#   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+#   HEROKU_APP_NAME: your-heroku-app-name
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.11.3
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run migration
+        run: python3 manage.py makemigrations &&
+              python3 manage.py migrate
+        
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run tests
+        run: python manage.py test eliminationtournaments
+

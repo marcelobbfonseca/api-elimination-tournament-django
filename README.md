@@ -18,5 +18,5 @@ In root directory run ```docker-compose up```. App will start and run in port lo
 
 #### Debug
 
-Run bash inside the application container. Run ```docker exec -it djangoapp bash``` in another terminal while the container is running.
+Run bash inside the application container. Run ```docker exec -it tournament-api bash``` in another terminal while the container is running.
 
