@@ -14,7 +14,6 @@ on:
 #   HEROKU_APP_NAME: your-heroku-app-name
 
 jobs:
-
   container-job:
     runs-on: ubuntu-latest
     container: node:10.18-jessie
@@ -23,7 +22,8 @@ jobs:
         container_name: tournament-db
         image: postgres:14-bullseye
         env:
-          POSTGRES_USER: postgres
+          POSTGRES_HOST: postgres
+          POSTGRES_PORT: 5432
           POSTGRES_DB: tournament_db
           POSTGRES_PASSWORD: 123456
           PGPASSWORD: 123456
@@ -34,7 +34,6 @@ jobs:
           --health-retries 5
         # ports:
         #   - "5432:5432"
-
   build:
     runs-on: ubuntu-latest
     strategy:
@@ -58,4 +57,3 @@ jobs:
 
       - name: Run tests
         run: python manage.py test eliminationtournaments
-      
