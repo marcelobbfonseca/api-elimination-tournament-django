@@ -76,7 +76,7 @@ WSGI_APPLICATION = 'tournament_api.wsgi.application'
 DATABASES = {
     'default': {
         "ENGINE": "django.db.backends.postgresql",
-        'NAME': os.environ.get('DB_NAME', 'bpmn'),
+        'NAME': os.environ.get('DB_NAME', 'tournament_db'),
         'USER': os.environ.get('DB_USER', 'postgres'),
         'PASSWORD': os.environ.get('DB_PASS', '123456'),
         'HOST': os.environ.get('DB_HOST', 'db'),
