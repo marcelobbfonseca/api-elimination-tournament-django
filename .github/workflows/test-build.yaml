@@ -1,5 +1,5 @@
-name: Django Application Test and Build
-run-name: test and build
+name: Build and test
+run-name: build & test
 
 on:
   push:
