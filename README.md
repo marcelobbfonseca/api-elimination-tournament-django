@@ -23,3 +23,6 @@ In root directory run ```docker-compose up```. App will start and run in port lo
 
 Run bash inside the application container. Run ```docker exec -it tournament-api bash``` in another terminal while the container is running.
 
+### Seed Database
+
+`python3 manage.py shell < seed.py`
