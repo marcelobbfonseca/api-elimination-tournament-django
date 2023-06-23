@@ -7,8 +7,8 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from rest_framework.viewsets import ModelViewSet
-from eliminationtournaments.models import Tournament
-from eliminationtournaments.serializers import TournamentSerializer
+from eliminationtournaments.models import Tournament, Player
+from eliminationtournaments.serializers import TournamentSerializer, PlayerSerializer
 
 class TournamentViewWrapper(APIView):
 
@@ -41,3 +41,8 @@ class TournamentViewWrapper(APIView):
 class TournamentViewSet(ModelViewSet):
     queryset = Tournament.objects.all()
     serializer_class = TournamentSerializer
+
+class PlayerViewSet(ModelViewSet):
+    queryset = Player.objects.all()
+    serializer_class = PlayerSerializer
+

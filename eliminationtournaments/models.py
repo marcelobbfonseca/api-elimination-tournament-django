@@ -12,7 +12,7 @@ class Tournament(models.Model):
     current_round = models.IntegerField(default=0)
     total_rounds = models.IntegerField(default=0)
     match_time = models.IntegerField(default=DEFAULT_MATCH_TIME)
-    # positions = models.ManyToOneRel
+    # positions = models.ManyToOneRel positions_set.add() .all() .count() .filter
     # players = models.ManyToOneRel
     # rounds = models.ManyToOneRel
 
@@ -117,6 +117,7 @@ class Match(models.Model):
     position_two = models.ForeignKey(
         Position, null=True, blank=True,related_name='positions_two', on_delete=models.SET_NULL)
     disabled = models.BooleanField(default=False)
+    voted = models.BooleanField(default=False)
     round = models.ForeignKey(Round, on_delete=models.CASCADE)
 
     @staticmethod
