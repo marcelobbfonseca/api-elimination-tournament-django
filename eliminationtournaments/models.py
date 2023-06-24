@@ -49,6 +49,11 @@ class Tournament(models.Model):
             # self.rounds.values_list('id', flat=True),
         )
 
+    def __repr__(self) -> str:
+        return self.name
+
+    def __str__(self) -> str:
+        return "<{},{}>".format(self.id, self.name)
 
 class Round(models.Model):
     round_number = models.IntegerField(default=0)
@@ -71,6 +76,10 @@ class Round(models.Model):
             matches_ids= self.matches.values_list('id', flat=True)
         )
 
+    def __str__(self) -> str:
+        return "<{},{},round: {}>".format(self.id, self.tournament.name, self.round)
+
+
 class Player(models.Model):
     avatar = models.CharField(max_length=255)
     name = models.CharField(max_length=60)
@@ -81,6 +90,13 @@ class Player(models.Model):
 
     def to_entity(self) -> RoundEntity:
         return RoundEntity(self.id, self.avatar, self.name)
+
+    def __repr__(self) -> str:
+        return self.name
+
+    def __str__(self) -> str:
+        return "<{},{}>".format(self.id, self.name)
+
 
 class Position(models.Model):
     order = models.IntegerField(default=0)
@@ -110,6 +126,12 @@ class Position(models.Model):
             self.player.id,
             self.next_position.id
         )
+
+
+    def __str__(self) -> str:
+        player = self.player.name if self.player is not None else None
+        return "<{},{}, order: {}, {}>".format(self.id, self.tournament.name, self.order, player)
+
 
 class Match(models.Model):
     position_one = models.ForeignKey(
