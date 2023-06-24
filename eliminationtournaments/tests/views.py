@@ -49,7 +49,6 @@ class TournamentViewSetTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         tournament = Tournament.objects.get(pk=self.tournament.id)
         expected_data = TournamentSerializer(tournament).data
-        import pdb; pdb.set_trace()
         self.assertEqual(expected_data, response.data)
 
     # def test_create_tournament(self):
