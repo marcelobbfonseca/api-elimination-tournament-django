@@ -52,6 +52,21 @@ class PositionTest(TestCase):
     )
     self.assertIsNotNone(position.id)
 
+  def test_next_node(self):
+    tournament=Tournament.objects.create()
+    position = Position.objects.create(
+      order=0,
+      votes=0,
+      tournament=tournament
+    )
+    position.right_position = Position.objects.create(
+      order=1,
+      votes=0,
+      tournament=tournament
+    )
+    self.assertIsNotNone(position.right_position.next_position())
+    self.assertEqual(position.right_position.next_position(), position)
+
 class MatchTest(TestCase):
   def test_create(self):
     tournament=Tournament.objects.create()

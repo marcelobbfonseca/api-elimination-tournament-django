@@ -103,8 +103,32 @@ class Position(models.Model):
     votes = models.IntegerField(default=0)
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
     player = models.ForeignKey(Player, null=True, blank=True, on_delete=models.SET_NULL)
-    next_position = models.ForeignKey(
-        'self', null=True, blank=True, on_delete=models.SET_NULL)
+    bracket_index  = models.IntegerField(default=-1)
+    # left tree node
+    left_position = models.OneToOneField(
+        'self', null=True, blank=True,related_name='next_left', on_delete=models.SET_NULL)
+    # right tree node
+    right_position =models.OneToOneField(
+        'self', default=None, null=True, blank=True,related_name='next_right', on_delete=models.SET_NULL)     
+
+    def next_position(self):
+        left = self.get_next_left()
+        if left is not None:
+            return left
+        right = self.get_next_right()
+        if right is not None:
+            return right
+        return None
+    def get_next_right(self):
+        try:
+            return self.next_right
+        except self.DoesNotExist:
+            return None
+    def get_next_left(self):
+        try:
+            return self.next_left
+        except self.DoesNotExist:
+            return None
 
     @staticmethod
     def from_entity(entity: PositionEntity) -> 'Position':
@@ -114,7 +138,6 @@ class Position(models.Model):
             votes= entity.votes,
             tournament_id= entity.tournament,
             player_id= entity.player,
-            next_position= entity.next_position,
         )
 
     def to_entity(self) -> PositionEntity:
@@ -130,7 +153,10 @@ class Position(models.Model):
 
     def __str__(self) -> str:
         player = self.player.name if self.player is not None else None
-        return "<{},{}, order: {}, {}>".format(self.id, self.tournament.name, self.order, player)
+        left = self.left_position.id if self.left_position is not None else None
+        right = self.right_position.id if self.right_position is not None else None
+        next =  self.next_position().id if self.next_position() is not None else None
+        return "<{},{}, depth: {}, {}, left: {},next: {}, right: {}>".format(self.id, self.tournament.name, self.order, player, left, next, right)
 
 
 class Match(models.Model):
