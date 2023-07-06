@@ -10,20 +10,23 @@ class PlayerSerializer(serializers.ModelSerializer):
 class PositionSerializer(serializers.ModelSerializer):
     player = PlayerSerializer(read_only=True)  
     next_position = serializers.PrimaryKeyRelatedField(read_only=True, required=False)
-    # next = PositionSerializer(read_only=True, required=False, source='next_position')
     depth = 1
     class Meta:
         model = Position
-        fields = ('id', 'order', 'votes', 'player', 'next_position', 'left_position', 'right_position')
-
+        fields = ('id', 'bracket_index', 'order', 'votes', 'player', 'next_position', 'left_position', 'right_position')
+        
 class TournamentSerializer(serializers.HyperlinkedModelSerializer):
-    position_set = PositionSerializer(many=True, read_only=True)
+    position_set = serializers.SerializerMethodField() # PositionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Tournament
         fields = ('id', 'name', 'status', 'tournament_type',
                   'current_round', 'total_rounds', 'match_time',
                   'position_set')
+    
+    def get_position_set(self, instance):
+        positions = instance.position_set.all().order_by('bracket_index')
+        return PositionSerializer(positions, many=True, read_only=True).data
 
 class MatchSerializer(serializers.HyperlinkedModelSerializer):
     position_one = PositionSerializer(read_only=True)
