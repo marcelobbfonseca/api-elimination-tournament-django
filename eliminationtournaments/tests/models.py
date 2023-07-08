@@ -46,7 +46,7 @@ class PositionTest(TestCase):
   def test_create(self):
     tournament=Tournament.objects.create()
     position = Position.objects.create(
-      order=1,
+      depth=1,
       votes=0,
       tournament=tournament
     )
@@ -55,12 +55,12 @@ class PositionTest(TestCase):
   def test_next_node(self):
     tournament=Tournament.objects.create()
     position = Position.objects.create(
-      order=0,
+      depth=0,
       votes=0,
       tournament=tournament
     )
     position.right_position = Position.objects.create(
-      order=1,
+      depth=1,
       votes=0,
       tournament=tournament
     )
@@ -70,8 +70,8 @@ class PositionTest(TestCase):
 class MatchTest(TestCase):
   def test_create(self):
     tournament=Tournament.objects.create()
-    position = Position.objects.create(order=1, votes=0, tournament=tournament)
-    position_2 = Position.objects.create(order=2, votes=0, tournament=tournament)
+    position = Position.objects.create(depth=1, votes=0, tournament=tournament)
+    position_2 = Position.objects.create(depth=2, votes=0, tournament=tournament)
     round = Round.objects.create(round_number=0, tournament=tournament)
     matchup = Match.objects.create(
         position_one=position,

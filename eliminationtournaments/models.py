@@ -99,7 +99,7 @@ class Player(models.Model):
 
 
 class Position(models.Model):
-    order = models.IntegerField(default=0)
+    depth = models.IntegerField(default=0)
     votes = models.IntegerField(default=0)
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
     player = models.ForeignKey(Player, null=True, blank=True, on_delete=models.SET_NULL)
@@ -134,7 +134,7 @@ class Position(models.Model):
     def from_entity(entity: PositionEntity) -> 'Position':
         return Position(
             id= entity.id,
-            order= entity.order,
+            depth= entity.order,
             votes= entity.votes,
             tournament_id= entity.tournament,
             player_id= entity.player,
@@ -143,7 +143,7 @@ class Position(models.Model):
     def to_entity(self) -> PositionEntity:
         return PositionEntity(
             self.id,
-            self.order,
+            self.depth,
             self.votes,
             self.tournament.id,
             self.player.id,
@@ -156,7 +156,7 @@ class Position(models.Model):
         left = self.left_position.id if self.left_position is not None else None
         right = self.right_position.id if self.right_position is not None else None
         next =  self.next_position().id if self.next_position() is not None else None
-        return "<{},{}, depth: {}, {}, left: {},next: {}, right: {}>".format(self.id, self.tournament.name, self.order, player, left, next, right)
+        return "<{},{}, depth: {}, {}, left: {},next: {}, right: {}>".format(self.id, self.tournament.name, self.depth, player, left, next, right)
 
 
 class Match(models.Model):

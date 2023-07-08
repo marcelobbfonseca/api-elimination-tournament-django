@@ -13,10 +13,10 @@ class PositionSerializer(serializers.ModelSerializer):
     depth = 1
     class Meta:
         model = Position
-        fields = ('id', 'bracket_index', 'order', 'votes', 'player', 'next_position', 'left_position', 'right_position')
+        fields = ('id', 'bracket_index', 'depth', 'votes', 'player', 'next_position', 'left_position', 'right_position')
         
 class TournamentSerializer(serializers.HyperlinkedModelSerializer):
-    position_set = serializers.SerializerMethodField() # PositionSerializer(many=True, read_only=True)
+    position_set = serializers.SerializerMethodField()
 
     class Meta:
         model = Tournament
