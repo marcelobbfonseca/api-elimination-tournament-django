@@ -67,5 +67,3 @@ class TournamentView:
         return {'status': 200, 'message': 'Ok.', 'body': tournament } 
       else:
         return {'status': 400, 'message': 'Bad request.', 'body': tournament } 
-
-
