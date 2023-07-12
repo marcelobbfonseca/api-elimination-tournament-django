@@ -14,7 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from eliminationtournaments.views_wrappers import TournamentViewWrapper 
+# from eliminationtournaments.views_wrappers import TournamentViewWrapper 
 from eliminationtournaments.views.tournaments_views import TournamentViewSet
 from eliminationtournaments.views.players_views import PlayerViewSet
 from eliminationtournaments.views.positions_views import PositionViewSet, PositionAPIView
@@ -33,6 +33,6 @@ urlpatterns = [
     path('api/v2/positions/<int:id>/vote', view=PositionAPIView.as_view(), name='position-vote'),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    path('api/v1/tournament/', view=TournamentViewWrapper.as_view(), name='tournament-list'),
-    path('api/v1/tournament/<int:id>/', view=TournamentViewWrapper.as_view(), name='tournament-details'),
+    # path('api/v1/tournament/', view=TournamentViewWrapper.as_view(), name='tournament-list'),
+    # path('api/v1/tournament/<int:id>/', view=TournamentViewWrapper.as_view(), name='tournament-details'),
 ]
