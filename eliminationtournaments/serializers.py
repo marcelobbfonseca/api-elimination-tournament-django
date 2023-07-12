@@ -21,7 +21,7 @@ class TournamentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Tournament
         fields = ('id', 'name', 'status', 'tournament_type',
-                  'current_round', 'total_rounds', 'match_time', 'end_match_time',
+                  'current_round', 'total_rounds', 'match_time', 'match_ends',
                   'position_set')
     
     def get_position_set(self, instance):

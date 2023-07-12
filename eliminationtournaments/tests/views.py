@@ -26,7 +26,7 @@ class TournamentViewSetTest(TestCase):
         )
 
         self.player.position_set.create(
-            order=0,
+            depth=0,
             votes=0,
             tournament=self.tournament
         )

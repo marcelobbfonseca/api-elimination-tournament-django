@@ -1,10 +1,14 @@
 from django.db import models
-
+from .models_interfaces import TournamentInterface, PositionInterface
 from eliminationtournaments.inner_layer.entities import (TournamentEntity, RoundEntity, PlayerEntity, 
     PositionEntity, MatchEntity, DEFAULT_MATCH_TIME)
 
+from eliminationtournaments.signals import start_tournament
 
-class Tournament(models.Model):
+
+
+
+class Tournament(TournamentInterface):
     name = models.CharField(default='unamed tournament', max_length=80)
     size = models.IntegerField(default=8)
     tournament_type = models.CharField(max_length=80, default='elimination')
@@ -12,10 +16,21 @@ class Tournament(models.Model):
     current_round = models.IntegerField(default=0)
     total_rounds = models.IntegerField(default=0)
     match_time = models.IntegerField(default=DEFAULT_MATCH_TIME)
-    end_match_time = models.IntegerField(default=0)
+    match_ends = models.IntegerField(default=0)
     # positions = models.ManyToOneRel positions_set.add() .all() .count() .filter
     # players = models.ManyToOneRel
     # rounds = models.ManyToOneRel
+    def set_current_round(self, round: int):
+        self.current_round = round
+
+    def set_match_end_time(self, time: int):
+        self.match_ends = time
+
+    def set_tournament_status(self, status: str):
+        self.status = status
+
+    def get_champion(self):
+        return self.position_set.get(depth=0)
 
     @staticmethod
     def from_entity(entity: TournamentEntity) -> 'Tournament':
@@ -93,13 +108,13 @@ class Player(models.Model):
         return RoundEntity(self.id, self.avatar, self.name)
 
     def __repr__(self) -> str:
-        return self.name
+        return "<{},{}>".format(self.id, self.name)
 
     def __str__(self) -> str:
         return "<{},{}>".format(self.id, self.name)
 
 
-class Position(models.Model):
+class Position(PositionInterface):
     depth = models.IntegerField(default=0)
     votes = models.IntegerField(default=0)
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
@@ -130,6 +145,9 @@ class Position(models.Model):
             return self.next_left
         except self.DoesNotExist:
             return None
+
+    def set_player(self, player: Player):
+        self.player = player
 
     @staticmethod
     def from_entity(entity: PositionEntity) -> 'Position':
@@ -185,3 +203,5 @@ class Match(models.Model):
             self.disabled,
             self.round.id,
         )
+
+models.signals.post_save.connect(start_tournament, sender=Tournament)
