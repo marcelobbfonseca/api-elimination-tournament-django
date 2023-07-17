@@ -3,7 +3,7 @@ from .models_interfaces import TournamentInterface, PositionInterface
 from eliminationtournaments.inner_layer.entities import (TournamentEntity, RoundEntity, PlayerEntity, 
     PositionEntity, MatchEntity, DEFAULT_MATCH_TIME)
 
-from eliminationtournaments.signals import start_tournament
+from eliminationtournaments.signals import start_tournament, create_brackets
 
 
 
@@ -28,6 +28,15 @@ class Tournament(TournamentInterface):
 
     def set_tournament_status(self, status: str):
         self.status = status
+
+    def set_total_rounds_by_size(self) -> None:
+        if self.size == 8:
+            self.total_rounds = 3
+        elif self.size == 4:
+            self.total_rounds = 2
+        elif self.size == 2:
+            self.total_rounds == 1
+
 
     def get_champion(self):
         return self.position_set.get(depth=0)
@@ -205,3 +214,4 @@ class Match(models.Model):
         )
 
 models.signals.post_save.connect(start_tournament, sender=Tournament)
+models.signals.post_save.connect(create_brackets, sender=Tournament)
