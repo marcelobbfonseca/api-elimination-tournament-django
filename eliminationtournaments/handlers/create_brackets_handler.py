@@ -14,4 +14,3 @@ class CreateBracketsHandler(HandlerInterface):
             self.tournament.set_total_rounds_by_size()
             self.tournament.save()
             create_elimination_tournament_brackets_usecase(self.tournament)
-            

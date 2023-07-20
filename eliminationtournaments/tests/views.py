@@ -3,6 +3,7 @@ from rest_framework import status
 from django.test import TestCase
 from eliminationtournaments.models import Tournament, Position, Player
 from eliminationtournaments.serializers import TournamentSerializer
+from eliminationtournaments.use_cases.create_brackets import SIZE_8_TOURNAMENT_TREE
 
 
 class TournamentViewSetTest(TestCase):
@@ -51,21 +52,14 @@ class TournamentViewSetTest(TestCase):
         expected_data = TournamentSerializer(tournament).data
         self.assertEqual(expected_data, response.data)
 
-    # def test_create_tournament(self):
-    #     # Define the tournament data for creation
-    #     tournament_data c= {'name': 'New Tournament',
-    #                        'location': 'New Location'}
+    def test_create_tournament(self):
+        tournament_data = { 'name': 'unamed tournament'}
 
-    #     # Send a POST request to create a new tournament
-    #     response = self.client.post('/api/tournaments/', tournament_data)
+        response = self.client.post('/api/v2/tournaments/', tournament_data)
 
-    #     # Check that the response has a status code of 201 (Created)
-    #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    #     # Get the created tournament from the database
-    #     created_tournament = Tournament.objects.get(pk=response.data['id'])
+        created_tournament = Tournament.objects.get(pk=response.data['id'])
 
-    #     # Check that the created tournament has the correct data
-    #     self.assertEqual(created_tournament.name, tournament_data['name'])
-    #     self.assertEqual(created_tournament.location,
-    #                      tournament_data['location'])
+        self.assertEqual(created_tournament.name, tournament_data['name'])
+        self.assertEqual(created_tournament.position_set.count(), len(SIZE_8_TOURNAMENT_TREE))

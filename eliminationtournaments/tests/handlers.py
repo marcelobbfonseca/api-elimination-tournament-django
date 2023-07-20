@@ -1,8 +1,9 @@
 from django.test import TestCase
 from eliminationtournaments.handlers.end_matches_handler import EndMatchesHandler
 from eliminationtournaments.handlers.start_matches_handler import StartMatchesHandler
+from eliminationtournaments.handlers.create_brackets_handler import CreateBracketsHandler
 from eliminationtournaments.models import Tournament, Position, Player
-
+from eliminationtournaments.use_cases.create_brackets import SIZE_8_TOURNAMENT_TREE
 
 class MatchHandlerTest(TestCase):
 
@@ -41,3 +42,19 @@ class MatchHandlerTest(TestCase):
         end_match_handler.execute()
         position.refresh_from_db()
         self.assertEqual(winner, position.player)
+
+    def test_create_brackets_handler(self):
+        tournament = Tournament.objects.create(
+            name='Bboy BC One',
+            size=8,
+            tournament_type='elimination',
+            status='draft',
+            match_time=300
+        )
+        handler = CreateBracketsHandler(tournament)
+        handler.execute()
+
+        tournament.refresh_from_db()
+        self.assertEqual(tournament.position_set.count(), len(SIZE_8_TOURNAMENT_TREE))
+
+        

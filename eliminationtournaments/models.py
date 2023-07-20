@@ -214,4 +214,4 @@ class Match(models.Model):
         )
 
 models.signals.post_save.connect(start_tournament, sender=Tournament)
-models.signals.post_save.connect(create_brackets, sender=Tournament)
+# models.signals.post_save.connect(create_brackets, sender=Tournament)
