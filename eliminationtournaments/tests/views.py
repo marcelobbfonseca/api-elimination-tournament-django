@@ -100,3 +100,19 @@ class PositionViewSetTest(TestCase):
         position = Position.objects.get(pk=self.position.id)
 
         self.assertEqual(position.player, self.player)
+
+
+    def test_update_position_create_player(self):
+        player_data = { 'name': 'novo jogador', 'avatar': 'C://avatar_2.png' }
+        position_data = { 'id': self.position.id, 'player': player_data, 'votes': 2 }
+        url = '/api/v2/positions/' + str(self.position.id)  + '/'
+
+        response = self.client.put(url, position_data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        position = Position.objects.get(pk=self.position.id)
+
+        self.assertIsNotNone(position.player)
+        self.assertIsNotNone(position.player.id)
+        self.assertNotEqual(position.player.id, self.player.id)
