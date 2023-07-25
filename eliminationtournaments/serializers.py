@@ -8,12 +8,22 @@ class PlayerSerializer(serializers.ModelSerializer):
         fields = ('id', 'avatar', 'name')
 
 class PositionSerializer(serializers.ModelSerializer):
-    player = PlayerSerializer(read_only=True)  
+    player = PlayerSerializer(required=False)  
     next_position = serializers.PrimaryKeyRelatedField(read_only=True, required=False)
     depth = 1
     class Meta:
         model = Position
         fields = ('id', 'bracket_index', 'depth', 'votes', 'player', 'next_position', 'left_position', 'right_position')
+        
+    def update(self, instance, validated_data):
+        player_data = validated_data.pop('player')
+
+        if player_data is not None:
+            player, _ = Player.objects.get_or_create(**player_data)
+            if player != instance.player:
+                instance.player = player
+                instance.save()
+        return super().update(instance, validated_data)
         
 
 class TournamentSerializer(serializers.HyperlinkedModelSerializer):

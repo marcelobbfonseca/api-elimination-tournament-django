@@ -58,7 +58,6 @@ class Tournament(TournamentInterface):
             # rounds_ids=entity.rounds  # Player.objects.filter(id__in=player_ids)
         )
 
-    # testar isso
     def to_entity(self) -> TournamentEntity:
         return TournamentEntity(
             self.name,
@@ -75,7 +74,7 @@ class Tournament(TournamentInterface):
         )
 
     def __repr__(self) -> str:
-        return self.name
+        return "<{},{}>".format(self.id, self.name)
 
     def __str__(self) -> str:
         return "<{},{}>".format(self.id, self.name)

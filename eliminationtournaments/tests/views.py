@@ -63,3 +63,40 @@ class TournamentViewSetTest(TestCase):
 
         self.assertEqual(created_tournament.name, tournament_data['name'])
         self.assertEqual(created_tournament.position_set.count(), len(SIZE_8_TOURNAMENT_TREE))
+
+
+class PositionViewSetTest(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.tournament = Tournament.objects.create(
+            name='Bboy BC One',
+            size=8,
+            tournament_type='elimination',
+            status='draft',
+            current_round=0,
+            total_rounds=3,
+            match_time=600
+        )
+
+        self.player = Player.objects.create(
+            name='jogador',
+            avatar='C://avatar.png'
+        )
+
+        self.position = Position.objects.create(
+            depth=0,
+            votes=0,
+            tournament=self.tournament
+        )
+    def test_update_position(self):
+        player_data = { 'name': 'jogador', 'avatar': 'C://avatar.png' }
+        position_data = { 'id': self.position.id, 'player': player_data, 'votes': 2 }
+        url = '/api/v2/positions/' + str(self.position.id)  + '/'
+
+        response = self.client.put(url, position_data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        position = Position.objects.get(pk=self.position.id)
+
+        self.assertEqual(position.player, self.player)
