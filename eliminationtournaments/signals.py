@@ -6,8 +6,8 @@ def start_tournament(sender, instance, created, **kwargs):
 
     if instance.status == 'start':
         instance.status = 'started'
-        start_matches = StartMatchesHandler()
-        start_matches.execute(instance)
+        start_matches = StartMatchesHandler(instance)
+        start_matches.execute()
 
 def create_brackets(sender, instance, created, **kwargs):
 

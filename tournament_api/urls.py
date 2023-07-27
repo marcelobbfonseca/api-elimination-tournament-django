@@ -18,6 +18,7 @@ Including another URLconf
 from eliminationtournaments.views.tournaments_views import TournamentViewSet
 from eliminationtournaments.views.players_views import PlayerViewSet
 from eliminationtournaments.views.positions_views import PositionViewSet, PositionAPIView
+from eliminationtournaments.views.server_time_view import ServerTimeAPIView
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
@@ -31,6 +32,7 @@ router.register(r'positions', PositionViewSet)
 urlpatterns = [
     path('api/v2/', include(router.urls)),
     path('api/v2/positions/<int:id>/vote', view=PositionAPIView.as_view(), name='position-vote'),
+    path('api/v2/time/', view=ServerTimeAPIView.as_view(), name='server-time'),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     # path('api/v1/tournament/', view=TournamentViewWrapper.as_view(), name='tournament-list'),

@@ -116,3 +116,15 @@ class PositionViewSetTest(TestCase):
         self.assertIsNotNone(position.player)
         self.assertIsNotNone(position.player.id)
         self.assertNotEqual(position.player.id, self.player.id)
+
+
+class ServerTimeTest(TestCase):
+
+    def test_get_server_time(self):
+        client = APIClient()
+        response = client.get('/api/v2/time/')
+        
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+        self.assertIsNotNone(response.data['datetime'])
+        self.assertIsNotNone(response.data['timestamp'])
