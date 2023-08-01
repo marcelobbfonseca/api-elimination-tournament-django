@@ -31,7 +31,7 @@ class TournamentSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Tournament
-        fields = ('id', 'name', 'status', 'tournament_type',
+        fields = ('id', 'name', 'size', 'status', 'tournament_type',
                   'current_round', 'total_rounds', 'match_time', 'match_ends',
                   'position_set')
     

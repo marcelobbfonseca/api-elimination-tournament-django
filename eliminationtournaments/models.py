@@ -16,7 +16,7 @@ class Tournament(TournamentInterface):
     current_round = models.IntegerField(default=0)
     total_rounds = models.IntegerField(default=0)
     match_time = models.IntegerField(default=DEFAULT_MATCH_TIME)
-    match_ends = models.IntegerField(default=0)
+    match_ends = models.FloatField(default=0.0)
     # positions = models.ManyToOneRel positions_set.add() .all() .count() .filter
     # players = models.ManyToOneRel
     # rounds = models.ManyToOneRel
