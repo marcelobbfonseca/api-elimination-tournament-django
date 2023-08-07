@@ -23,6 +23,8 @@ class EndMatchesHandler():
             position.save()
         print("current_round: {} total_rounds: {}".format(self.tournament.current_round, self.tournament.total_rounds))
         if self.tournament.current_round == self.tournament.total_rounds:
+            self.tournament.set_tournament_status('ended')
+            self.tournament.save()
             print('Tournament end')
         else:
             # start next match
