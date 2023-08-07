@@ -7,8 +7,8 @@ from eliminationtournaments.use_cases.create_brackets import SIZE_8_TOURNAMENT_T
 
 class MatchHandlerTest(TestCase):
 
-    def test_end_matchs_handler(self):
-        tournament = Tournament.objects.create(
+    def setUp(self) -> None:
+        self.tournament = Tournament.objects.create(
             name='Bboy BC One',
             size=2,
             tournament_type='elimination',
@@ -17,31 +17,34 @@ class MatchHandlerTest(TestCase):
             total_rounds=1,
             match_time=10
         )
-        loser = Player.objects.create(avatar='C://path/my_img.jpg', name='Bowser')
-        winner = Player.objects.create(avatar='C://path/my_img.jpg', name='Shy guy')
-        position = Position.objects.create(
+        self.loser = Player.objects.create(avatar='C://path/my_img.jpg', name='Bowser')
+        self.winner = Player.objects.create(avatar='C://path/my_img.jpg', name='Shy guy')
+        self.position = Position.objects.create(
             depth=0,
             votes=0,
-            tournament=tournament
+            tournament=self.tournament
         )
-        position.right_position = Position.objects.create(
+        self.position.right_position = Position.objects.create(
             depth=1,
             votes=1,
-            tournament=tournament,
-            player=loser
+            tournament=self.tournament,
+            player=self.loser
         )
-        position.left_position = Position.objects.create(
+        self.position.left_position = Position.objects.create(
             depth=1,
             votes=3,
-            tournament=tournament,
-            player=winner
+            tournament=self.tournament,
+            player=self.winner
         )
-        position.save()
-        start_match = StartMatchesHandler(tournament)
+        self.position.save()
+
+    def test_end_matchs_handler(self):
+        
+        start_match = StartMatchesHandler(self.tournament)
         end_match_handler = EndMatchesHandler(start_match)
         end_match_handler.execute()
-        position.refresh_from_db()
-        self.assertEqual(winner, position.player)
+        self.position.refresh_from_db()
+        self.assertEqual(self.winner, self.position.player)
 
     def test_create_brackets_handler(self):
         tournament = Tournament.objects.create(
@@ -57,4 +60,14 @@ class MatchHandlerTest(TestCase):
         tournament.refresh_from_db()
         self.assertEqual(tournament.position_set.count(), len(SIZE_8_TOURNAMENT_TREE))
 
-        
+    def test_start_matches_handler(self):
+        start_round, self.tournament.current_round = 0, 0
+        self.tournament.save()
+
+        start_match = StartMatchesHandler(self.tournament)
+        start_match.execute()
+        self.tournament.refresh_from_db()
+
+
+        self.assertEqual(self.tournament.current_round, start_round + 1)
+        self.assertTrue(self.tournament.match_ends > 0)

@@ -1,39 +1,33 @@
-from datetime import datetime
-import schedule
+from django.utils import timezone
+# import schedule
+from eliminationtournaments.singletons import BGScheduler
 from eliminationtournaments.models_interfaces import TournamentInterface
 from eliminationtournaments.handlers.end_matches_handler import EndMatchesHandler
 from .handler_interface import HandlerInterface
-
+from tournament_api.settings import TIME_ZONE
 class StartMatchesHandler(HandlerInterface):
 
     def __init__(self, tournament: TournamentInterface) -> None:
         self.tournament = tournament
 
     def execute(self) -> None:
-        now = datetime.now().timestamp()
-        end_time = self.tournament.match_time + now
+        now = timezone.now().timestamp()
+        end_time = float(self.tournament.match_time) + now
         next_round = self.tournament.current_round + 1
+
         self.tournament.set_current_round(next_round)
         self.tournament.set_match_end_time(end_time)
         self.tournament.save()
+        
+        end_date = timezone.datetime.fromtimestamp(end_time)
+        print('==========================')
+        print(end_date.strftime("%d/%m/%Y %H:%M:%S"))
+        print('==========================')
 
-        end_date = datetime.fromtimestamp(end_time)
-        schedule.every().day.at(end_date.strftime('%H:%M:%S')).do(self.call_end_match(self.tournament))
+        bg = BGScheduler.get_instance()
+        bg.sched.add_job(self.call_end_match, 'date', run_date=end_date, timezone=TIME_ZONE)
 
     def call_end_match(self):
-        print('alooo')
+        print('start job')
         end_matches = EndMatchesHandler(self)
         end_matches.execute()
-        return schedule.CancelJob
-
-# import time
-
-# def job_that_executes_once():
-#     # Do some work that only needs to happen once...
-#     return schedule.CancelJob
-
-# schedule.every().day.at('22:30').do(job_that_executes_once)
-
-# while True:
-#     schedule.run_pending()
-#     time.sleep(1)

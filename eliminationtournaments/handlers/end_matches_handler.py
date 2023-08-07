@@ -21,9 +21,9 @@ class EndMatchesHandler():
             winner = calculate_winner_usecase(position)
             position.set_player(winner)
             position.save()
-
+        print("current_round: {} total_rounds: {}".format(self.tournament.current_round, self.tournament.total_rounds))
         if self.tournament.current_round == self.tournament.total_rounds:
-            pass
-            # end tournament
+            print('Tournament end')
         else:
+            # start next match
             self.start_match.execute()
