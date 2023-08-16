@@ -1,3 +1,4 @@
+APScheduler==3.10.1
 asgiref==3.6.0
 autopep8==2.0.2
 dataclasses==0.6
@@ -10,6 +11,7 @@ Markdown==3.4.3
 psycopg2==2.9.6
 pycodestyle==2.10.0
 pytz==2023.3
-schedule==1.2.0
+six==1.16.0
 sqlparse==0.4.4
 typing==3.7.4.3
+tzlocal==5.0.1
