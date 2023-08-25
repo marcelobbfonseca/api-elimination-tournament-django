@@ -26,7 +26,12 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-3$502l5ex7fo69c5b^zfi
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [ 'https://elimination-tournament.onrender.com', 'https://vote-tournament.netlify.app']
+ALLOWED_HOSTS = [ 
+    'https://elimination-tournament.onrender.com', 
+    'elimination-tournament.onrender.com',
+    'vote-tournament.netlify.app',
+    'https://vote-tournament.netlify.app',
+]
 
 
 # Application definition
