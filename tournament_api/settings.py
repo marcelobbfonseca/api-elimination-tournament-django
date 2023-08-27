@@ -61,15 +61,15 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    'elimination-tournament.onrender.com',
-    'vote-tournament.netlify.app',
-    'http://localhost:8080',
+    'https://elimination-tournament.onrender.com',
+    'https://vote-tournament.netlify.app',
+    # 'http://localhost:8080',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'elimination-tournament.onrender.com',
-    'vote-tournament.netlify.app',
-    "http://localhost:8080",
+    'https://elimination-tournament.onrender.com',
+    'https://vote-tournament.netlify.app',
+    # 'http://localhost:8080',
 ]
 
 ROOT_URLCONF = 'tournament_api.urls'
