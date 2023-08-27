@@ -27,16 +27,18 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-3$502l5ex7fo69c5b^zfi
 DEBUG = True
 
 ALLOWED_HOSTS = [ 
-    'https://elimination-tournament.onrender.com', 
     'elimination-tournament.onrender.com',
     'vote-tournament.netlify.app',
+    'https://elimination-tournament.onrender.com', 
     'https://vote-tournament.netlify.app',
+    # 'localhost'
 ]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'eliminationtournaments.apps.EliminationtournamentsConfig',
     'rest_framework',
     'django.contrib.admin',
@@ -59,10 +61,14 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8080",
+    'elimination-tournament.onrender.com',
+    'vote-tournament.netlify.app',
+    'http://localhost:8080',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
+    'elimination-tournament.onrender.com',
+    'vote-tournament.netlify.app',
     "http://localhost:8080",
 ]
 
