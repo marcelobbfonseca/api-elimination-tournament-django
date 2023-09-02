@@ -38,8 +38,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
 
-    path('', IndexView.as_view(), {'resource': ''}, name='index'),
-    re_path('^.*$', IndexView.as_view()),
+    # path('', IndexView.as_view(), {'resource': ''}, name='index'),
+    # re_path('^.*$', IndexView.as_view()),
     # path('<path:resource>', IndexView.as_view())
     # path('api/v1/tournament/', view=TournamentViewWrapper.as_view(), name='tournament-list'),
     # path('api/v1/tournament/<int:id>/', view=TournamentViewWrapper.as_view(), name='tournament-details'),
