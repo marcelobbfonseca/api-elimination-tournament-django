@@ -19,8 +19,10 @@ from eliminationtournaments.views.tournaments_views import TournamentViewSet
 from eliminationtournaments.views.players_views import PlayerViewSet
 from eliminationtournaments.views.positions_views import PositionViewSet, PositionAPIView
 from eliminationtournaments.views.server_time_view import ServerTimeAPIView
+from eliminationtournaments.views.index_views import IndexView
+
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from rest_framework import routers
 
 router = routers.DefaultRouter()
@@ -35,6 +37,10 @@ urlpatterns = [
     path('api/v2/time/', view=ServerTimeAPIView.as_view(), name='server-time'),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
+
+    path('', IndexView.as_view(), {'resource': ''}, name='index'),
+    re_path('^.*$', IndexView.as_view()),
+    # path('<path:resource>', IndexView.as_view())
     # path('api/v1/tournament/', view=TournamentViewWrapper.as_view(), name='tournament-list'),
     # path('api/v1/tournament/<int:id>/', view=TournamentViewWrapper.as_view(), name='tournament-details'),
 ]

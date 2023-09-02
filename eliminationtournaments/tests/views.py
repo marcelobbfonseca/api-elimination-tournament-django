@@ -1,6 +1,8 @@
 from rest_framework.test import APIClient
 from rest_framework import status
 from django.test import TestCase
+from django.urls import reverse
+
 from eliminationtournaments.models import Tournament, Position, Player
 from eliminationtournaments.serializers import TournamentSerializer
 from eliminationtournaments.use_cases.create_brackets import SIZE_8_TOURNAMENT_TREE
@@ -128,3 +130,9 @@ class ServerTimeTest(TestCase):
         
         self.assertIsNotNone(response.data['datetime'])
         self.assertIsNotNone(response.data['timestamp'])
+
+class IndexTest(TestCase):
+    def test_get_index(self):
+        response = self.client.get(reverse('index'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'index.html')
