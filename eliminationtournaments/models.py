@@ -154,8 +154,11 @@ class Position(PositionInterface):
         except self.DoesNotExist:
             return None
 
-    def set_player(self, player: Player):
+    def set_player(self, player: Player) -> None:
         self.player = player
+    
+    def increment_vote(self) -> None:
+        self.votes+=1
 
     @staticmethod
     def from_entity(entity: PositionEntity) -> 'Position':
