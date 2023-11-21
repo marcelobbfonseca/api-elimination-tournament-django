@@ -38,6 +38,7 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'corsheaders',
     'eliminationtournaments.apps.EliminationtournamentsConfig',
     'rest_framework',
@@ -91,6 +92,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'tournament_api.wsgi.application'
+ASGI_APPLICATION = "tournament_api.asgi.application"
 
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 

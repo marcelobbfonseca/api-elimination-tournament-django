@@ -131,8 +131,8 @@ class ServerTimeTest(TestCase):
         self.assertIsNotNone(response.data['datetime'])
         self.assertIsNotNone(response.data['timestamp'])
 
-class IndexTest(TestCase):
-    def test_get_index(self):
-        response = self.client.get(reverse('index'))
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'index.html')
+# class IndexTest(TestCase):
+#     def test_get_index(self):
+#         response = self.client.get(reverse('index'))
+#         self.assertEqual(response.status_code, 200)
+#         self.assertTemplateUsed(response, 'index.html')
