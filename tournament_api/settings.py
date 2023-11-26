@@ -24,30 +24,29 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'tournament_api/static')
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-3$502l5ex7fo69c5b^zfi&yj##m5hj&75^7hpa_m7ke+i0ac2v')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', True)
 
 ALLOWED_HOSTS = [ 
     'elimination-tournament.onrender.com',
     'vote-tournament.netlify.app',
     'https://elimination-tournament.onrender.com', 
     'https://vote-tournament.netlify.app',
-    # 'localhost'
 ]
-
 
 # Application definition
 
 INSTALLED_APPS = [
-    'channels',
+    'daphne',
     'corsheaders',
-    'eliminationtournaments.apps.EliminationtournamentsConfig',
     'rest_framework',
+    'eliminationtournaments.apps.EliminationtournamentsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.staticfiles'
+
 ]
 
 MIDDLEWARE = [
@@ -64,14 +63,17 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     'https://elimination-tournament.onrender.com',
     'https://vote-tournament.netlify.app',
-    # 'http://localhost:8080',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     'https://elimination-tournament.onrender.com',
     'https://vote-tournament.netlify.app',
-    # 'http://localhost:8080',
 ]
+if DEBUG:
+    CSRF_TRUSTED_ORIGINS.append('http://localhost:8080')
+    CORS_ALLOWED_ORIGINS.append('http://localhost:8080')
+    ALLOWED_HOSTS.append('localhost') 
+
 
 ROOT_URLCONF = 'tournament_api.urls'
 
@@ -93,6 +95,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'tournament_api.wsgi.application'
 ASGI_APPLICATION = "tournament_api.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        },
+    },
+}
 
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
