@@ -9,7 +9,8 @@ on:
     branches:
       - main
 
-# env:
+env:
+  CICD: true
 #   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
 #   HEROKU_APP_NAME: your-heroku-app-name
 

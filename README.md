@@ -26,3 +26,10 @@ Run bash inside the application container. Run ```docker exec -it tournament-api
 ### Seed Database
 
 `python3 manage.py shell < seed.py`
+
+#### Seed Fixtures
+
+`manage.py loaddata fixtures/player.json`
+`manage.py loaddata fixtures/position.json`
+`manage.py loaddata fixtures/tournament.json`
+
