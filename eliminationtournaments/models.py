@@ -79,30 +79,6 @@ class Tournament(TournamentInterface):
     def __str__(self) -> str:
         return "<{},{}>".format(self.id, self.name)
 
-class Round(models.Model):
-    round_number = models.IntegerField(default=0)
-    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
-    # matches = models.ManyToOneRel
-
-    @staticmethod
-    def from_entity(entity: RoundEntity) -> 'Round':
-        return Round(
-            round_number= entity.round_number,
-            tournament_id= entity.tournament_id,
-            matches_ids= entity.matches_ids
-        )
-
-    def to_entity(self) -> RoundEntity:
-        return RoundEntity(
-            self.id,
-            self.round_number,
-            self.tournament.id,
-            matches_ids= self.matches.values_list('id', flat=True)
-        )
-
-    def __str__(self) -> str:
-        return "<{},{},round: {}>".format(self.id, self.tournament.name, self.round)
-
 
 class Player(models.Model):
     avatar = models.CharField(max_length=255)
@@ -189,31 +165,6 @@ class Position(PositionInterface):
         return "<{},{}, depth: {}, {}, left: {},next: {}, right: {}>".format(self.id, self.tournament.name, self.depth, player, left, next, right)
 
 
-class Match(models.Model):
-    position_one = models.ForeignKey(
-        Position, null=True, blank=True,related_name='positions_one' , on_delete=models.SET_NULL)
-    position_two = models.ForeignKey(
-        Position, null=True, blank=True,related_name='positions_two', on_delete=models.SET_NULL)
-    disabled = models.BooleanField(default=False)
-    voted = models.BooleanField(default=False)
-    round = models.ForeignKey(Round, on_delete=models.CASCADE)
-
-    @staticmethod
-    def from_entity(entity: MatchEntity) -> 'Match':
-        return Match(
-            position_one=entity.position_one,
-            position_two=entity.position_two,
-            disabled=entity.disabled,
-            round_id=entity.round_id,
-        )
-
-    def to_entity(self) -> MatchEntity:
-        return MatchEntity(
-            self.position_one.id,
-            self.position_two.id,
-            self.disabled,
-            self.round.id,
-        )
 
 models.signals.post_save.connect(start_tournament, sender=Tournament)
 # models.signals.post_save.connect(create_brackets, sender=Tournament)

@@ -1,5 +1,5 @@
 from django.test import TestCase
-from eliminationtournaments.models import Tournament, Round, Player, Position, Match
+from eliminationtournaments.models import Tournament, Player, Position
 from eliminationtournaments.inner_layer.entities import TournamentEntity
 
 class TournamentTest(TestCase):
@@ -31,11 +31,6 @@ class TournamentTest(TestCase):
     self.assertEqual(entity.id, tournament.id)
 
 
-class RoundTest(TestCase):
-  def test_create(self):
-    tournament = Tournament.objects.create()
-    round = Round.objects.create(round_number=0, tournament=tournament)
-    self.assertIsNotNone(round.id)
 
 class PlayerTest(TestCase):
   def test_create(self):
@@ -67,16 +62,3 @@ class PositionTest(TestCase):
     self.assertIsNotNone(position.right_position.next_position())
     self.assertEqual(position.right_position.next_position(), position)
 
-class MatchTest(TestCase):
-  def test_create(self):
-    tournament=Tournament.objects.create()
-    position = Position.objects.create(depth=1, votes=0, tournament=tournament)
-    position_2 = Position.objects.create(depth=2, votes=0, tournament=tournament)
-    round = Round.objects.create(round_number=0, tournament=tournament)
-    matchup = Match.objects.create(
-        position_one=position,
-        position_two=position_2,
-        disabled=False,
-        round=round
-    )
-    self.assertIsNotNone(matchup.id)

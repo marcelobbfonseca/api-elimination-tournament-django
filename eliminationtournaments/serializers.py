@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Tournament, Player, Position, Match
+from .models import Tournament, Player, Position
 from eliminationtournaments.handlers.create_brackets_handler import CreateBracketsHandler
 
 class PlayerSerializer(serializers.ModelSerializer):
@@ -46,10 +46,3 @@ class TournamentSerializer(serializers.HyperlinkedModelSerializer):
     def get_position_set(self, instance):
         positions = instance.position_set.all().order_by('bracket_index')
         return PositionSerializer(positions, many=True, read_only=True).data
-
-class MatchSerializer(serializers.HyperlinkedModelSerializer):
-    position_one = PositionSerializer(read_only=True)
-    position_two = PositionSerializer(read_only=True)
-    class Meta:
-        model = Match
-        fields = ('position_one', 'position_two' 'disabled', 'voted', 'round')
