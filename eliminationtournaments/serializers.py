@@ -44,5 +44,14 @@ class TournamentSerializer(serializers.HyperlinkedModelSerializer):
         return instance
     
     def get_position_set(self, instance):
-        positions = instance.position_set.all().order_by('bracket_index')
-        return PositionSerializer(positions, many=True, read_only=True).data
+        request = self.context.get('request')
+        if type(request) == str:
+            if request == 'INDEX':
+                return None 
+            positions = instance.position_set.all().order_by('bracket_index')
+            return PositionSerializer(positions, many=True, read_only=True).data
+
+        if 'pk' in request.parser_context['kwargs']:
+            positions = instance.position_set.all().order_by('bracket_index')
+            return PositionSerializer(positions, many=True, read_only=True).data
+        return None

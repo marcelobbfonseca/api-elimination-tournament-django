@@ -42,7 +42,7 @@ class TournamentViewSetTest(TestCase):
 
         tournaments_data = response.data
         tournaments = Tournament.objects.all()
-        expected_data = TournamentSerializer(tournaments, many=True).data
+        expected_data = TournamentSerializer(tournaments, many=True, context={'request': 'INDEX'}).data
         self.assertEqual(tournaments_data, expected_data)
 
     def test_retrieve_tournaments(self):
@@ -51,7 +51,7 @@ class TournamentViewSetTest(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         tournament = Tournament.objects.get(pk=self.tournament.id)
-        expected_data = TournamentSerializer(tournament).data
+        expected_data = TournamentSerializer(tournament, context={'request': 'FIND'}).data
         self.assertEqual(expected_data, response.data)
 
     def test_create_tournament(self):

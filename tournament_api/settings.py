@@ -103,15 +103,15 @@ if CICD:
         },
     }
 else:
+    host, port = os.environ.get('REDIS_HOST', 'redis'), os.environ.get('REDIS_PORT', 6379)
     CHANNEL_LAYERS = {
         "default": {
             "BACKEND": "channels_redis.core.RedisChannelLayer",
             "CONFIG": {
-                "hosts": [("redis", 6379)],
+                "hosts": [(host, port)],
             },
         },
     }
-
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
