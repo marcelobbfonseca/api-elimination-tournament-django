@@ -25,7 +25,6 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-3$502l5ex7fo69c5b^zfi
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', True)
-CICD = os.environ.get('CICD', False)
 
 ALLOWED_HOSTS = [ 
     'elimination-tournament.onrender.com',
@@ -96,7 +95,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'tournament_api.wsgi.application'
 ASGI_APPLICATION = "tournament_api.asgi.application"
-if CICD:
+if DEBUG:
     CHANNEL_LAYERS = {
         "default": {
             "BACKEND": "channels.layers.InMemoryChannelLayer",
