@@ -1,7 +1,7 @@
 from django.db import models
 from .models_interfaces import TournamentInterface, PositionInterface
-from eliminationtournaments.inner_layer.entities import (TournamentEntity, RoundEntity, PlayerEntity, 
-    PositionEntity, MatchEntity, DEFAULT_MATCH_TIME)
+from eliminationtournaments.inner_layer.entities import (TournamentEntity, PlayerEntity, 
+    PositionEntity, DEFAULT_MATCH_TIME)
 
 from eliminationtournaments.signals import start_tournament, create_brackets
 
@@ -17,9 +17,13 @@ class Tournament(TournamentInterface):
     total_rounds = models.IntegerField(default=0)
     match_time = models.IntegerField(default=DEFAULT_MATCH_TIME)
     match_ends = models.FloatField(default=0.0)
+    views = models.IntegerField(default=0)
     # positions = models.ManyToOneRel positions_set.add() .all() .count() .filter
     # players = models.ManyToOneRel
     # rounds = models.ManyToOneRel
+    class Meta:
+        indexes = [models.Index(fields=['views'])]
+
     def set_current_round(self, round: int):
         self.current_round = round
 
@@ -88,8 +92,8 @@ class Player(models.Model):
     def from_entity(entity: PlayerEntity) -> 'Player':
         return Player(id= entity.id, avatar= entity.avatar, name= entity.name)
 
-    def to_entity(self) -> RoundEntity:
-        return RoundEntity(self.id, self.avatar, self.name)
+    def to_entity(self) -> PlayerEntity:
+        return PlayerEntity(self.id, self.avatar, self.name)
 
     def __repr__(self) -> str:
         return "<{},{}>".format(self.id, self.name)

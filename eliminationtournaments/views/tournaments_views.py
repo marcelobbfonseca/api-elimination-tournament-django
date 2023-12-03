@@ -6,5 +6,5 @@ from eliminationtournaments.models import Tournament
 from eliminationtournaments.serializers import TournamentSerializer
 
 class TournamentViewSet(ModelViewSet):
-    queryset = Tournament.objects.all()
+    queryset = Tournament.objects.order_by('-views')
     serializer_class = TournamentSerializer

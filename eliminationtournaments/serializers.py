@@ -33,7 +33,7 @@ class TournamentSerializer(serializers.HyperlinkedModelSerializer):
         model = Tournament
         fields = ('id', 'name', 'size', 'status', 'tournament_type',
                   'current_round', 'total_rounds', 'match_time', 'match_ends',
-                  'position_set')
+                  'position_set', 'views')
     
     
     def create(self, data):
