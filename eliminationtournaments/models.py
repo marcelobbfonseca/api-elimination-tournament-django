@@ -6,7 +6,7 @@ from eliminationtournaments.inner_layer.entities import (TournamentEntity, Playe
 from eliminationtournaments.signals import start_tournament, create_brackets
 
 
-
+TOURNAMENT_STATUS = ('started', 'ended', 'created', 'draft')
 
 class Tournament(TournamentInterface):
     name = models.CharField(default='unamed tournament', max_length=80)
