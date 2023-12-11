@@ -2,7 +2,8 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from rest_framework.request import Request
 
-from eliminationtournaments.models import Tournament, TOURNAMENT_STATUS
+from eliminationtournaments.models import Tournament
+from eliminationtournaments.models_interfaces import TournamentStatuses
 from eliminationtournaments.serializers import TournamentSerializer
 
 class TournamentViewSet(ModelViewSet):
@@ -12,6 +13,6 @@ class TournamentViewSet(ModelViewSet):
     def get_queryset(self):
         status = self.request.query_params.get('status', None)
 
-        if status and status in TOURNAMENT_STATUS:
+        if status and status in TournamentStatuses.ALL:
             return Tournament.objects.filter(status=status).order_by('-views')
         return super().get_queryset()

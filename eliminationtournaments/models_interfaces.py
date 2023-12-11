@@ -1,5 +1,13 @@
 from django.apps import apps
 from django.db import models
+from abc import ABC
+
+class TournamentStatuses(ABC):
+    ALL = ('started', 'ended', 'created', 'draft')
+    STARTED='started'
+    ENDED='ended'
+    CREATED='created'
+    DRAFT='draft'
 
 class TournamentInterface(models.Model):
     

@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Tournament, Player, Position
 from eliminationtournaments.handlers.create_brackets_handler import CreateBracketsHandler
+from eliminationtournaments.models_interfaces import TournamentStatuses
 
 class PlayerSerializer(serializers.ModelSerializer):
     class Meta:
@@ -43,15 +44,20 @@ class TournamentSerializer(serializers.HyperlinkedModelSerializer):
         instance.refresh_from_db()
         return instance
     
-    def get_position_set(self, instance):
+    def get_position_set(self, instance: Tournament):
         request = self.context.get('request')
         if type(request) == str:
             if request == 'INDEX':
-                return None 
+                if instance.status == TournamentStatuses.ENDED:
+                    return [ { 'champion': PositionSerializer(instance.get_champion(),read_only=True).data } ]
+                return []
             positions = instance.position_set.all().order_by('bracket_index')
             return PositionSerializer(positions, many=True, read_only=True).data
 
         if 'pk' in request.parser_context['kwargs']:
             positions = instance.position_set.all().order_by('bracket_index')
             return PositionSerializer(positions, many=True, read_only=True).data
-        return None
+        
+        if instance.status == TournamentStatuses.ENDED:
+            return [ { 'champion': PositionSerializer(instance.get_champion(),read_only=True).data } ]
+        return []
