@@ -42,7 +42,9 @@ class Tournament(TournamentInterface):
 
 
     def get_champion(self):
-        return self.position_set.get(depth=0)
+        position: Position = self.position_set.get(depth=0)
+        position.votes = max(position.left_position.votes, position.right_position.votes)
+        return position
 
     @staticmethod
     def from_entity(entity: TournamentEntity) -> 'Tournament':
