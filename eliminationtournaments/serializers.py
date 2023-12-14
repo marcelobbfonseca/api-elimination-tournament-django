@@ -59,8 +59,7 @@ class TournamentSerializer(serializers.HyperlinkedModelSerializer):
             positions = instance.position_set.all().order_by('bracket_index')
             return PositionSerializer(positions, many=True, read_only=True).data
 
-        if 'pk' in request.parser_context['kwargs']:
+        if 'pk' in request.parser_context['kwargs'] or request.method == 'POST':
             positions = instance.position_set.all().order_by('bracket_index')
             return PositionSerializer(positions, many=True, read_only=True).data
-        
         return []
