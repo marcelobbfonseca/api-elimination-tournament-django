@@ -8,6 +8,13 @@ class PlayerSerializer(serializers.ModelSerializer):
         model = Player
         fields = ('id', 'avatar', 'name')
 
+
+class ChampionField(serializers.SerializerMethodField):
+    def to_representation(self, instance):
+        if instance.status == TournamentStatuses.ENDED:
+            return PositionSerializer(instance.get_champion(), read_only=True).data
+        return None
+
 class PositionSerializer(serializers.ModelSerializer):
     player = PlayerSerializer(required=False)  
     next_position = serializers.PrimaryKeyRelatedField(read_only=True, required=False)
@@ -29,12 +36,12 @@ class PositionSerializer(serializers.ModelSerializer):
 
 class TournamentSerializer(serializers.HyperlinkedModelSerializer):
     position_set = serializers.SerializerMethodField()
-
+    champion = ChampionField()
     class Meta:
         model = Tournament
         fields = ('id', 'name', 'size', 'status', 'tournament_type',
                   'current_round', 'total_rounds', 'match_time', 'match_ends',
-                  'position_set', 'views')
+                  'position_set', 'views', 'champion')
     
     
     def create(self, data):
@@ -48,8 +55,6 @@ class TournamentSerializer(serializers.HyperlinkedModelSerializer):
         request = self.context.get('request')
         if type(request) == str:
             if request == 'INDEX':
-                if instance.status == TournamentStatuses.ENDED:
-                    return [ { 'champion': PositionSerializer(instance.get_champion(),read_only=True).data } ]
                 return []
             positions = instance.position_set.all().order_by('bracket_index')
             return PositionSerializer(positions, many=True, read_only=True).data
@@ -58,6 +63,4 @@ class TournamentSerializer(serializers.HyperlinkedModelSerializer):
             positions = instance.position_set.all().order_by('bracket_index')
             return PositionSerializer(positions, many=True, read_only=True).data
         
-        if instance.status == TournamentStatuses.ENDED:
-            return [ { 'champion': PositionSerializer(instance.get_champion(),read_only=True).data } ]
         return []
