@@ -10,13 +10,13 @@ class Tournament(TournamentInterface):
     name = models.CharField(default='unamed tournament', max_length=80)
     size = models.IntegerField(default=8)
     tournament_type = models.CharField(max_length=80, default='elimination')
-    status = models.CharField(default='draft',  max_length=20)# started, ended, created, draft
+    status = models.CharField(default='draft',  max_length=20)
     current_round = models.IntegerField(default=0)
     total_rounds = models.IntegerField(default=0)
     match_time = models.IntegerField(default=DEFAULT_MATCH_TIME)
     match_ends = models.FloatField(default=0.0)
     views = models.IntegerField(default=0)
-    # positions = models.ManyToOneRel positions_set.add() .all() .count() .filter
+    # positions = models.ManyToOneRel
     # players = models.ManyToOneRel
     # rounds = models.ManyToOneRel
     class Meta:
@@ -56,9 +56,6 @@ class Tournament(TournamentInterface):
             current_round=entity.current_round,
             total_rounds=entity.total_rounds,
             match_time=entity.match_time,
-            # positions_ids=entity.positions,
-            # players_ids=entity.players,  # Player.objects.filter(id__in=player_ids)
-            # rounds_ids=entity.rounds  # Player.objects.filter(id__in=player_ids)
         )
 
     def to_entity(self) -> TournamentEntity:
@@ -71,9 +68,6 @@ class Tournament(TournamentInterface):
             current_round=self.current_round,
             total_rounds=self.total_rounds,
             match_time=self.match_time,
-            # self.positions.values_list('id', flat=True),
-            # self.players.values_list('id', flat=True),
-            # self.rounds.values_list('id', flat=True),
         )
 
     def __repr__(self) -> str:
