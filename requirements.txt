@@ -36,3 +36,4 @@ typing==3.7.4.3
 typing_extensions==4.8.0
 tzlocal==5.0.1
 zope.interface==6.1
+pre-commit
