@@ -1,5 +1,6 @@
 
 from eliminationtournaments.models_interfaces import PositionInterface as Position
+from eliminationtournaments.models_interfaces import TournamentStatuses
 from eliminationtournaments.use_cases.position_usecases import calculate_winner_usecase
 from eliminationtournaments.handlers.handler_interface import HandlerInterface
 
@@ -23,9 +24,8 @@ class EndMatchesHandler():
             position.save()
         print("current_round: {} total_rounds: {}".format(self.tournament.current_round, self.tournament.total_rounds))
         if self.tournament.current_round == self.tournament.total_rounds:
-            self.tournament.set_tournament_status('ended')
+            self.tournament.set_tournament_status(TournamentStatuses.ENDED)
             self.tournament.save()
             print('Tournament end')
         else:
-            # start next match
             self.start_match.execute()
