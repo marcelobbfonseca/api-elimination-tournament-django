@@ -14,7 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-# from eliminationtournaments.views_wrappers import TournamentViewWrapper 
+# from eliminationtournaments.views.views_wrappers import TournamentViewWrapper 
 from eliminationtournaments.views.tournaments_views import TournamentViewSet
 from eliminationtournaments.views.players_views import PlayerViewSet
 from eliminationtournaments.views.positions_views import PositionViewSet, PositionAPIView

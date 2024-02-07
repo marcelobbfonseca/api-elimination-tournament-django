@@ -1,5 +1,5 @@
 from eliminationtournaments.models import Tournament
-from eliminationtournaments.views_wrappers import TournamentViewWrapper
+from eliminationtournaments.views.views_wrappers import TournamentViewWrapper
 
 # from unittest import TestCase
 from django.urls import reverse

@@ -6,7 +6,6 @@ from eliminationtournaments.inner_layer.entities import (TournamentEntity, Playe
 from eliminationtournaments.signals import start_tournament, create_brackets
 
 
-    
 class Tournament(TournamentInterface):
     name = models.CharField(default='unamed tournament', max_length=80)
     size = models.IntegerField(default=8)
@@ -57,7 +56,6 @@ class Tournament(TournamentInterface):
             current_round=entity.current_round,
             total_rounds=entity.total_rounds,
             match_time=entity.match_time,
-            # Player.objects.filter(id__in=player_ids)
             # positions_ids=entity.positions,
             # players_ids=entity.players,  # Player.objects.filter(id__in=player_ids)
             # rounds_ids=entity.rounds  # Player.objects.filter(id__in=player_ids)

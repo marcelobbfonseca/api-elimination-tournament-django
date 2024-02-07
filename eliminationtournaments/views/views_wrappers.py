@@ -1,4 +1,3 @@
-from eliminationtournaments.views.v1_views import TournamentView
 
 from typing import Any
 from rest_framework.views import APIView
@@ -9,7 +8,7 @@ from rest_framework import status
 class TournamentViewWrapper(APIView):
 
     def __init__(self, **kwargs: Any) -> None:
-        self.view = TournamentView()
+        self.view = None
         super().__init__(**kwargs)
 
     def post(self, request: Request, *args, **kwargs):
