@@ -71,8 +71,13 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 if DEBUG:
     CSRF_TRUSTED_ORIGINS.append('http://localhost:8080')
+    CSRF_TRUSTED_ORIGINS.append('https://localhost:8080')
+    
     CORS_ALLOWED_ORIGINS.append('http://localhost:8080')
+    CORS_ALLOWED_ORIGINS.append('https://localhost:8080')
+    
     ALLOWED_HOSTS.append('localhost') 
+    ALLOWED_HOSTS.append('https://localhost') 
 
 
 ROOT_URLCONF = 'tournament_api.urls'
