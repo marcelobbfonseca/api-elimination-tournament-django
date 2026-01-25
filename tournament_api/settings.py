@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_celery_results',
-    # 'celery'
 ]
 
 MIDDLEWARE = [
@@ -61,6 +60,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
 CORS_ALLOWED_ORIGINS = [
     'https://elimination-tournament.onrender.com',
     'https://vote-tournament.netlify.app',
@@ -69,6 +69,7 @@ CORS_ALLOWED_ORIGINS = [
 CSRF_TRUSTED_ORIGINS = [
     'https://elimination-tournament.onrender.com',
     'https://vote-tournament.netlify.app',
+
 ]
 if DEBUG:
     CSRF_TRUSTED_ORIGINS.append('http://localhost:8080')
