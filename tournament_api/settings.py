@@ -45,8 +45,9 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles'
-
+    'django.contrib.staticfiles',
+    'django_celery_results',
+    # 'celery'
 ]
 
 MIDDLEWARE = [
@@ -179,4 +180,43 @@ REST_FRAMEWORK = {
     # 'DEFAULT_PERMISSION_CLASSES': [
     #     'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     # ]
+}
+
+
+RABBIT_USER = os.getenv("RABBIT_HOST", "admin")
+RABBIT_PW = os.getenv("RABBIT_HOST", "admin")
+RABBIT_HOST = os.getenv("RABBIT_HOST", "rabbitmq")
+RABBIT_PORT = os.getenv("RABBIT_HOST", "5672")
+
+# Celery Configuration Options
+CELERY_TIMEZONE = "America/Sao_Paulo"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_BROKER_URL = f'amqp://{RABBIT_USER}:{RABBIT_PW}@{RABBIT_HOST}:{RABBIT_PORT}//'
+CELERY_RESULT_BACKEND = 'rpc://'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND = 'django-cache'
+
+# pick which cache from the CACHES setting.
+CELERY_CACHE_BACKEND = 'default'
+
+REDIS_HOST = os.getenv("REDIS_HOST", "redis")
+REDIS_DB = os.getenv("REDIS_DB", "1")
+REDIS_PORT = os.getenv("REDIS_PORT", "6379")
+# django setting.
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "CONNECTION_POOL_KWARGS": {
+                "max_connections": 50,
+                "retry_on_timeout": True,
+            },
+        },
+        "TIMEOUT": 60 * 5,  # 5 minutes
+    }
 }
