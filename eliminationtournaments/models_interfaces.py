@@ -10,6 +10,16 @@ class TournamentStatuses(ABC):
     DRAFT='draft'
 
 class TournamentInterface(models.Model):
+    id: int
+    name: str
+    size: int
+    tournament_type: str
+    status: str
+    current_round: int
+    total_rounds: int
+    match_time: int
+    match_ends: float
+    views: int
     
     class Meta:
         abstract = True

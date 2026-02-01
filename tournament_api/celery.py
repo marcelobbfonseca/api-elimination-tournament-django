@@ -16,12 +16,28 @@ app.autodiscover_tasks()
 
 
 tournament_exchange = Exchange("tournament.events", type="topic", durable=True)
+
+tournament_dlx = Exchange("tournament.dlx", type="fanout", durable=True)
+
+
+
 app.conf.task_queues = (
     Queue(
         "tournament-events",
         exchange=tournament_exchange,
         routing_key="tournament.#",
+        durable=True,
+        queue_arguments={
+            "x-dead-letter-exchange": "tournament.dlx",
+            "x-message-ttl": 60000 * 10,  # 10 minutes
+        },
     ),
+    Queue(
+        "tournament-events.dlq",
+        exchange=tournament_dlx,
+        routing_key="",
+        durable=True
+    )
 )
 
 app.conf.task_routes = {
