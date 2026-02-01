@@ -6,6 +6,7 @@ from django.urls import reverse
 from eliminationtournaments.models import Tournament, Position, Player
 from eliminationtournaments.serializers import TournamentSerializer
 from eliminationtournaments.use_cases.create_brackets import SIZE_8_TOURNAMENT_TREE
+from eliminationtournaments.models_interfaces import TournamentStatuses
 
 
 class TournamentViewSetTest(TestCase):
@@ -65,6 +66,13 @@ class TournamentViewSetTest(TestCase):
 
         self.assertEqual(created_tournament.name, tournament_data['name'])
         self.assertEqual(created_tournament.position_set.count(), len(SIZE_8_TOURNAMENT_TREE))
+
+
+    def test_start_tournament(self):
+        self.tournament.status = TournamentStatuses.CREATED
+        self.tournament.save()
+        response = self.client.put(f'/api/v2/tournaments/{self.tournament.id}/start/', format="json")
+        self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
 
 
 class PositionViewSetTest(TestCase):

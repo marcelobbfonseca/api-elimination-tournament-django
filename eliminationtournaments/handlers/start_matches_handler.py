@@ -1,10 +1,13 @@
 from django.utils import timezone
 # import schedule
-from eliminationtournaments.singletons import BGScheduler
+# from eliminationtournaments.singletons import BGScheduler
+
 from eliminationtournaments.models_interfaces import TournamentInterface
-from eliminationtournaments.handlers.end_matches_handler import EndMatchesHandler
 from .handler_interface import HandlerInterface
 from tournament_api.settings import TIME_ZONE
+from eliminationtournaments.tasks import end_match
+
+
 class StartMatchesHandler(HandlerInterface):
 
     def __init__(self, tournament: TournamentInterface) -> None:
@@ -24,10 +27,7 @@ class StartMatchesHandler(HandlerInterface):
         print(end_date.strftime("%d/%m/%Y %H:%M:%S"))
         print('==========================')
 
-        bg = BGScheduler.get_instance()
-        bg.sched.add_job(self.call_end_match, 'date', run_date=end_date, timezone=TIME_ZONE)
-
-    def call_end_match(self):
-        print('start job')
-        end_matches = EndMatchesHandler(self)
-        end_matches.execute()
+        end_match.apply_async(
+            args=[self.tournament.id],
+            eta=end_time,
+        )

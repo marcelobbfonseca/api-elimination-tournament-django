@@ -161,7 +161,3 @@ class Position(PositionInterface):
         next =  self.next_position().id if self.next_position() is not None else None
         return "<{},{}, depth: {}, {}, left: {},next: {}, right: {}>".format(self.id, self.tournament.name, self.depth, player, left, next, right)
 
-
-
-models.signals.post_save.connect(start_tournament, sender=Tournament)
-# models.signals.post_save.connect(create_brackets, sender=Tournament)
