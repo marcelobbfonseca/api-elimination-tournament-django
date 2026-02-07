@@ -22,6 +22,7 @@ tournament_dlx = Exchange("tournament.dlx", type="fanout", durable=True)
 
 
 app.conf.task_queues = (
+    Queue("celery"),
     Queue(
         "tournament-events",
         exchange=tournament_exchange,
@@ -41,7 +42,9 @@ app.conf.task_queues = (
 )
 
 app.conf.task_routes = {
-    "eliminationtournaments.consumers.ws_fanout": {
-        "queue": "tournament-events",
-    },
+    "eliminationtournaments.tasks.score_request": {"queue": "tournament-events"},
+    "eliminationtournaments.tasks.end_match": {"queue": "tournament-events"},
+    "eliminationtournaments.tasks.start_tournament": {"queue": "tournament-events"},
+
+    "eliminationtournaments.consumers.ws_fanout": { "queue": "tournament-events" },
 }

@@ -20,4 +20,5 @@ class TournamentConsumer(AsyncJsonWebsocketConsumer):
         )
 
     async def tournament_event(self, event):
+        print(f"tournament_event: {event}")
         await self.send_json(event["payload"])

@@ -13,25 +13,14 @@ class PositionViewSet(ModelViewSet):
     queryset = Position.objects.all()
     serializer_class = PositionSerializer
 
-class PositionAPIView(APIView):
-
-    def put(self, request: Request, id=None):
-        if id is not None:
-            position = Position.objects.get(id=id)
-            position.votes += 1
-            position.save()
-            return Response({"message": "success"}, status=status.HTTP_200_OK)
-        return Response({"message": "error"}, status=status.HTTP_400_BAD_REQUEST)
-
-
     @action( detail=True,methods=["put"], url_path="score" ) # permission_classes=[IsAdminUser],
     def start(self, request, pk=None):
         position = self.get_object()
         
         # Guardrail (fast fail)
-        if position.tournament.status != TournamentStatuses.CREATED:
+        if position.tournament.status != TournamentStatuses.STARTED:
             return Response(
-                {"error": "Tournament cannot be started in its current state"},
+                {"error": "Position cannot score in tournament current state"},
                 status=status.HTTP_409_CONFLICT,
             )
 
@@ -39,6 +28,6 @@ class PositionAPIView(APIView):
         score_request.delay(position.tournament.id, position.id)
 
         return Response(
-            {"message": "Tournament start scheduled"},
+            {"message": "score request scheduled"},
             status=status.HTTP_202_ACCEPTED,
         )

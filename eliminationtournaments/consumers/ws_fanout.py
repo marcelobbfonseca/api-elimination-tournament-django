@@ -12,13 +12,16 @@ def ws_fanout(self, event: dict):
     Receives tournament.<id>.<event> messages
     and fans them out to WebSocket clients.
     """
-
+    print(f"WS_FANOUT_TASK_EXECUTED {event}")
+    
     event_id = event.get("event_id")
     if not event_id: 
-        return
+        print("event is None")
+        return False
     
     if is_event_processed(event_id):
-        return
+        print("event is processed")
+        return False
 
     tournament_id = event["tournament_id"]
 
@@ -36,3 +39,4 @@ def ws_fanout(self, event: dict):
     )
 
     mark_event_processed(event_id)
+    return True

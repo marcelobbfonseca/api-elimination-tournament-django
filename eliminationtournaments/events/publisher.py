@@ -1,6 +1,5 @@
 from kombu import Exchange, Producer
 from tournament_api.celery import app
-from eliminationtournaments.events.idempotency import is_event_processed, mark_event_processed
 tournament_exchange = Exchange(
     name="tournament.events",
     type="topic",

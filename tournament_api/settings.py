@@ -31,6 +31,8 @@ ALLOWED_HOSTS = [
     'vote-tournament.netlify.app',
     'https://elimination-tournament.onrender.com', 
     'https://vote-tournament.netlify.app',
+    "localhost", 
+    "127.0.0.1",
 ]
 
 # Application definition
@@ -47,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_celery_results',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -102,22 +105,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'tournament_api.wsgi.application'
 ASGI_APPLICATION = "tournament_api.asgi.application"
-if DEBUG:
-    CHANNEL_LAYERS = {
-        "default": {
-            "BACKEND": "channels.layers.InMemoryChannelLayer",
+
+host = os.environ.get('REDIS_HOST', 'redis')
+port = os.environ.get('REDIS_PORT', 6379)
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [(host, port)],
         },
-    }
-else:
-    host, port = os.environ.get('REDIS_HOST', 'redis'), os.environ.get('REDIS_PORT', 6379)
-    CHANNEL_LAYERS = {
-        "default": {
-            "BACKEND": "channels_redis.core.RedisChannelLayer",
-            "CONFIG": {
-                "hosts": [(host, port)],
-            },
-        },
-    }
+    },
+}
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {

@@ -11,7 +11,6 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      # - ./project-dump/:/var/www/html
       - ./pgdb:/var/lib/postgresql/data
   redis:
     container_name: tournament-redis
@@ -30,7 +29,8 @@ services:
               pip install --no-cache-dir -r requirements.txt &&
               python3 manage.py makemigrations &&
               python3 manage.py migrate &&
-              python3 manage.py runserver 0.0.0.0:3000"
+              daphne -b 0.0.0.0 -p 3000 tournament_api.asgi:application" 
+    # python3 manage.py runserver 0.0.0.0:3000
     volumes:
       - .:/code # for development only
     ports:
@@ -73,6 +73,7 @@ services:
     command: celery -A tournament_api beat -l info
     volumes:
       - .:/code
+      
     depends_on:
       - djangoapp
       - rabbitmq

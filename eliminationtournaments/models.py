@@ -45,30 +45,6 @@ class Tournament(TournamentInterface):
         position.votes = max(position.left_position.votes, position.right_position.votes)
         return position
 
-    @staticmethod
-    def from_entity(entity: TournamentEntity) -> 'Tournament':
-        return Tournament(
-            id=entity.id,
-            name=entity.name,
-            size=entity.size,
-            tournament_type=entity.tournament_type,
-            status=entity.status,
-            current_round=entity.current_round,
-            total_rounds=entity.total_rounds,
-            match_time=entity.match_time,
-        )
-
-    def to_entity(self) -> TournamentEntity:
-        return TournamentEntity(
-            self.name,
-            self.size,
-            self.tournament_type,
-            id=int(self.id),
-            status=self.status,
-            current_round=self.current_round,
-            total_rounds=self.total_rounds,
-            match_time=self.match_time,
-        )
 
     def __repr__(self) -> str:
         return "<{},{}>".format(self.id, self.name)
@@ -80,13 +56,6 @@ class Tournament(TournamentInterface):
 class Player(models.Model):
     avatar = models.CharField(max_length=255)
     name = models.CharField(max_length=60)
-
-    @staticmethod
-    def from_entity(entity: PlayerEntity) -> 'Player':
-        return Player(id= entity.id, avatar= entity.avatar, name= entity.name)
-
-    def to_entity(self) -> PlayerEntity:
-        return PlayerEntity(self.id, self.avatar, self.name)
 
     def __repr__(self) -> str:
         return "<{},{}>".format(self.id, self.name)
@@ -132,27 +101,6 @@ class Position(PositionInterface):
     
     def increment_vote(self) -> None:
         self.votes+=1
-
-    @staticmethod
-    def from_entity(entity: PositionEntity) -> 'Position':
-        return Position(
-            id= entity.id,
-            depth= entity.order,
-            votes= entity.votes,
-            tournament_id= entity.tournament,
-            player_id= entity.player,
-        )
-
-    def to_entity(self) -> PositionEntity:
-        return PositionEntity(
-            self.id,
-            self.depth,
-            self.votes,
-            self.tournament.id,
-            self.player.id,
-            self.next_position.id
-        )
-
 
     def __str__(self) -> str:
         player = self.player.name if self.player is not None else None
